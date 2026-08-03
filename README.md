@@ -75,8 +75,8 @@ The notebooks expect the following datasets in `data/` directory.
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/AIRI-Institute/MX2CHE.git
-   cd MX2CHE
+   git clone https://github.com/AIRI-Institute/2DMaterialsGraphHull.git
+   cd 2DMaterialsGraphHull
    ```
 2. Create a Python virtual environment, activate it and install dependencies:
    ```bash
