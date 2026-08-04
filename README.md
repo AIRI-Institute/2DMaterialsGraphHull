@@ -2,6 +2,11 @@
 
 **2DMaterialsGraphHull** provides the composition/configuration-space (CCS) datasets, DFT and graph neural network (GNN) energetics, and post-processing code developed for studying chemical disorder and point defects in two-dimensional transition metal dichalcogenide (TMD) monolayers — alloyed and defected MeX₂ (Me = Mo, W; X = S, Se) systems.
 
+<p align="center">
+  <img src="./figures/logo.png" width="50%" title="2DMaterialsGraphHull datasets" alt="2DMaterialsGraphHull datasets"/>
+</p>
+
+
 ---
 
 ## Table of Contents
@@ -60,9 +65,9 @@ The notebooks expect the following datasets in `data/` directory.
 | Dataset                                     | Description                                                                                                                                                                                                    |
 |---------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `2d-materials-point-defects-all-table`      | Processed 2DMD dataset (12866 samples).                                                                                                                                                                        |
-| `neat_elements-dft_subset`                  | Reference DFT-derived energies of the pure elements (W, Mo, Se, S).                                                                                                                                            |
+| `neat_elements-dft_subset`                  | Reference DFT-derived energies of the pure elements (W, Mo, Se, S) (4 samples).                                                                                                                                |
 | `train_ccs-gnn_predictions_dft_subset`      | Training CCS with detailed description of structures, DFT-derived and GNN-predicted energies (11159 samples).                                                                                                  |
-| `train_ccs-2dmd-convex_hull`                | Training CCS and 2DMD structures with convex-hull energies and compositional simplex coordinates.                                                                                                              |
+| `train_ccs-2dmd-convex_hull`                | Training CCS and 2DMD structures with convex-hull energies and compositional simplex coordinates (11159 + 12866 + 4 samples).                                                                                  |
 | `2dmd-W1Mo14Se2S28_W14Mo1Se28S2-dft_subset` | The most favorable/unfavorable structures of 2DMD dataset with W<sub>1</sub>Mo<sub>14</sub>Se<sub>2</sub>S<sub>28</sub> and W<sub>14</sub>Mo<sub>1</sub>Se<sub>28</sub>S<sub>2</sub> compositions (4 samples). |
 | `inference1_ccs-dft_subset`                 | Subset of the first inference CCS with DFT-derived energies (HT#1) (5556 samples).                                                                                                                             |
 | `inference1_ccs-gnn_predictions_subset`     | The first inference CCS with GNN-predicted energies (542196 samples).                                                                                                                                          |
