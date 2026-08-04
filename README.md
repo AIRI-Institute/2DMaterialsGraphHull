@@ -3,7 +3,7 @@
 **2DMaterialsGraphHull** provides the composition/configuration-space (CCS) datasets, DFT and graph neural network (GNN) energetics, and post-processing code developed for studying chemical disorder and point defects in two-dimensional transition metal dichalcogenide (TMD) monolayers — alloyed and defected MeX₂ (Me = Mo, W; X = S, Se) systems.
 
 <p align="center">
-  <img src="./figures/logo.png" width="50%" title="2DMaterialsGraphHull datasets" alt="2DMaterialsGraphHull datasets"/>
+  <img src="./figures/logo.png" width="100%" title="2DMaterialsGraphHull datasets" alt="2DMaterialsGraphHull datasets"/>
 </p>
 
 
