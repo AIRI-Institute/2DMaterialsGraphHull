@@ -91,14 +91,14 @@ The notebooks expect the following datasets in `data/` directory.
    ```
 3. Use the [2DMD_at_a_Glance](https://github.com/AIRI-Institute/2DMD_at_a_Glance) project to prepare the `2d-materials-point-defects-all-table` dataset and place it in the `data/` directory. The [CSSLib](https://github.com/AIRI-Institute/CSSLib) library (used to generate and analyze the CCSs themselves) is available separately.
 4. Download datasets to `data/` directory by links below:
-   - [neat_elements-dft_subset](https://2d-materials-graph-hull.obs.ru-moscow-1.hc.sbercloud.ru/neat_elements_dataset.pkl.gz)
-   - [train_ccs-gnn_predictions_dft_subset](https://2d-materials-graph-hull.obs.ru-moscow-1.hc.sbercloud.ru/ccs_dataset_inference.pkl.gz)
-   - [train_ccs-2dmd-convex_hull](https://2d-materials-graph-hull.obs.ru-moscow-1.hc.sbercloud.ru/energies_df.pkl.gz)
-   - [2dmd-W1Mo14Se2S28_W14Mo1Se28S2-dft_subset](https://2d-materials-graph-hull.obs.ru-moscow-1.hc.sbercloud.ru/structures_24def.pkl.gz)
-   - [inference1_ccs-dft_subset](https://2d-materials-graph-hull.obs.ru-moscow-1.hc.sbercloud.ru/structures_Ndef.pkl.gz)
-   - [inference1_ccs-gnn_predictions_subset](https://2d-materials-graph-hull.obs.ru-moscow-1.hc.sbercloud.ru/5formula_ccs_inference.pkl.gz)
-   - [inference2_ccs-composition_size](https://2d-materials-graph-hull.obs.ru-moscow-1.hc.sbercloud.ru/comp_num.pkl.gz)
-   - [inference2_ccs-gnn_predictions_subset](https://2d-materials-graph-hull.obs.ru-moscow-1.hc.sbercloud.ru/models-more_60k_highestSG_1-less_60k_all.pkl.gz)
+   - [neat_elements-dft_subset](https://2d-materials-graph-hull.obs.ru-moscow-1.hc.sbercloud.ru/neat_elements-dft_subset.pkl.gz)
+   - [train_ccs-gnn_predictions_dft_subset](https://2d-materials-graph-hull.obs.ru-moscow-1.hc.sbercloud.ru/train_ccs-gnn_predictions_dft_subset.pkl.gz)
+   - [train_ccs-2dmd-convex_hull](https://2d-materials-graph-hull.obs.ru-moscow-1.hc.sbercloud.ru/train_ccs-2dmd-convex_hull.pkl.gz)
+   - [2dmd-W1Mo14Se2S28_W14Mo1Se28S2-dft_subset](hhttps://2d-materials-graph-hull.obs.ru-moscow-1.hc.sbercloud.ru/2dmd-W1Mo14Se2S28_W14Mo1Se28S2-dft_subset.pkl.gz)
+   - [inference1_ccs-dft_subset](https://2d-materials-graph-hull.obs.ru-moscow-1.hc.sbercloud.ru/inference1_ccs-dft_subset.pkl.gz)
+   - [inference1_ccs-gnn_predictions_subset](https://2d-materials-graph-hull.obs.ru-moscow-1.hc.sbercloud.ru/inference1_ccs-gnn_predictions_subset.pkl.gz)
+   - [inference2_ccs-composition_size](https://2d-materials-graph-hull.obs.ru-moscow-1.hc.sbercloud.ru/inference2_ccs-composition_size.pkl.gz)
+   - [inference2_ccs-gnn_predictions_subset](https://2d-materials-graph-hull.obs.ru-moscow-1.hc.sbercloud.ru/inference2_ccs-gnn_predictions_subset.pkl.gz)
 5. Launch Jupyter Lab or Notebook:
    ```bash
    jupyter lab
