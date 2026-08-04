@@ -94,7 +94,7 @@ The notebooks expect the following datasets in `data/` directory.
    - [neat_elements-dft_subset](https://2d-materials-graph-hull.obs.ru-moscow-1.hc.sbercloud.ru/neat_elements-dft_subset.pkl.gz)
    - [train_ccs-gnn_predictions_dft_subset](https://2d-materials-graph-hull.obs.ru-moscow-1.hc.sbercloud.ru/train_ccs-gnn_predictions_dft_subset.pkl.gz)
    - [train_ccs-2dmd-convex_hull](https://2d-materials-graph-hull.obs.ru-moscow-1.hc.sbercloud.ru/train_ccs-2dmd-convex_hull.pkl.gz)
-   - [2dmd-W1Mo14Se2S28_W14Mo1Se28S2-dft_subset](hhttps://2d-materials-graph-hull.obs.ru-moscow-1.hc.sbercloud.ru/2dmd-W1Mo14Se2S28_W14Mo1Se28S2-dft_subset.pkl.gz)
+   - [2dmd-W1Mo14Se2S28_W14Mo1Se28S2-dft_subset](https://2d-materials-graph-hull.obs.ru-moscow-1.hc.sbercloud.ru/2dmd-W1Mo14Se2S28_W14Mo1Se28S2-dft_subset.pkl.gz)
    - [inference1_ccs-dft_subset](https://2d-materials-graph-hull.obs.ru-moscow-1.hc.sbercloud.ru/inference1_ccs-dft_subset.pkl.gz)
    - [inference1_ccs-gnn_predictions_subset](https://2d-materials-graph-hull.obs.ru-moscow-1.hc.sbercloud.ru/inference1_ccs-gnn_predictions_subset.pkl.gz)
    - [inference2_ccs-composition_size](https://2d-materials-graph-hull.obs.ru-moscow-1.hc.sbercloud.ru/inference2_ccs-composition_size.pkl.gz)
