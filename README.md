@@ -111,7 +111,7 @@ Each notebook in the repository contains detailed comments and can be executed i
 
 Main packages (see `requirements.txt`):
 
-- Python ≥ 3.10
+- Python ≥ 3.11
 - Jupyter, Matplotlib, NumPy, Pandas, Plotly, Seaborn
 - PyMatGen (structure manipulation, space-group analysis)
 - SciPy, scikit-learn (Ridge Regression, Random Forest, GridSearchCV)
