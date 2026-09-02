@@ -38,7 +38,7 @@ Two complementary data sources feed this workflow:
 - **CCS (Composition/Configuration Space)** — the symmetry-unique defect/alloy configurations generated and DFT/GNN-evaluated in this work.
 - **2DMD dataset** — an existing library of 2D-material point-defect structures (Huang P., Lukin R., et al. Unveiling the complex structure-property correlation of defects in 2D materials based on high throughput datasets, *npj 2D Mater Appl* **7**, 6 (2023)), processed and augmented here via the companion [2DMD_at_a_Glance](https://github.com/AIRI-Institute/2DMD_at_a_Glance) code for use as additional training/validation/holdout data.
 
-The notebooks in this repository carry out CCS statistics and symmetry analysis, convex-hull construction and comparison of DFT vs. GNN energetics, holdout testing of the trained models (preliminary tests plus two inference CCS holdout tests, HT#1 and HT#2), configurational-entropy/free-energy evaluation, and descriptor-based interpretability.
+The notebooks in this repository carry out CCS statistics and symmetry analysis, convex-hull construction and comparison of DFT vs. GNN energetics, holdout testing of the trained models (preliminary tests plus two inference CCS holdout tests, HT#1 and HT#2), configurational-entropy/free-energy evaluation, and descriptor-based interpretability. The dedicated finite-temperature analysis evaluates $F_{conf}(T)$ for every composition, reconstructs the lower convex hull at each temperature, and reports $F_{above hull}(T)$ and temperature-dependent hull membership.
 
 ---
 
@@ -47,10 +47,11 @@ The notebooks in this repository carry out CCS statistics and symmetry analysis,
 | File                         | Description                                                                                                                                                                                       |
 |------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `train_ccs_statistics.ipynb` | Exploratory analysis of the training CCS dataset: space-group distributions, pairwise correlations, and heatmaps of defect counts.                                                                |
-| `convex_hull_analysis.ipynb` | Construction and visualization of the convex hull in the composition simplex, calculation of `E_above_hull`, and comparison between DFT and GNN predictions using training CCS and 2DMD datasets. |
+| `convex_hull_analysis.ipynb` | Construction and visualization of the convex hull in the composition simplex, calculation of $E_{above hull}$, and comparison between DFT and GNN predictions using training CCS and 2DMD datasets. |
 | `preliminary_test.ipynb`     | Preliminary evaluation of model performance on test part of training CCS dataset with space groups below a symmetry threshold (P1, Cm, etc.).                                                     |
 | `holdout_test_1.ipynb`       | First holdout test (HT#1): evaluation of GNN models on DFT-derived structures from the first inference CCS.                                                                                       |
-| `holdout_test_2.ipynb`       | Second holdout test (HT#2): evaluation of GNN models on structures selected from the second inference CCS, including hull-energy predictions and configurational entropy analysis.                |                                                           |
+| `holdout_test_2.ipynb`       | Second holdout test (HT#2): evaluation of GNN models on structures selected from the second inference CCS, including hull-energy predictions and configurational entropy analysis.                |
+| `finite_temperature_hull_analysis.ipynb` | Calculation of configurational free energies, reconstruction of the finite-temperature lower convex hull, and analysis of temperature-dependent stability across the second inference CCS. |
 | `tools.py`                   | Utility functions for data processing, simplex coordinates, convex hull, entropy calculations, and structure manipulation.                                                                        |
 | `requirements.txt`           | List of Python dependencies.                                                                                                                                                                      |
 | `data/`                      | Datasets (see below for details).                                                                                                                                                                 |
@@ -59,7 +60,7 @@ The notebooks in this repository carry out CCS statistics and symmetry analysis,
 
 ## Data Requirements
 
-The notebooks expect the following datasets in `data/` directory.
+The notebooks use the following input datasets and generated outputs in the `data/` directory.
 
 
 | Dataset                                     | Description                                                                                                                                                                                                    |
@@ -73,6 +74,8 @@ The notebooks expect the following datasets in `data/` directory.
 | `inference1_ccs-gnn_predictions_subset`     | The first inference CCS with GNN-predicted energies (542196 samples).                                                                                                                                          |
 | `inference2_ccs-composition_size`           | Numbers of symmetry-inequivalent structures corresponding to each composition in the second inference CCS (544 samples).                                                                                       |
 | `inference2_ccs-gnn_predictions_subset`     | Subset of the second inference CCS with GNN-predicted energies (5004502 samples). It contains 11486 HT#2 structures with DFT-derived energies.                                                                 |
+| `inference2_ccs-dft-minima`                 | Optional composition-indexed DFT minima used only when `apply_dft_minimum_correction = True` in the finite-temperature notebook; it is not required for the default calculation.                              |
+| `inference2_ccs-finite_temperature_hull`    | Generated long-format table containing composition, temperature, $F_{conf}$, the finite-temperature hull reference, $F_{above hull}$, hull membership, and CSS coverage metadata.                          |
 
 ---
 
@@ -104,6 +107,10 @@ The notebooks expect the following datasets in `data/` directory.
    jupyter lab
    ```
 Each notebook in the repository contains detailed comments and can be executed independently once the required data is in place.
+
+`finite_temperature_hull_analysis.ipynb` uses `inference2_ccs-gnn_predictions_subset.pkl.gz` and, by default, evaluates the hull from uncorrected GNN energies. To enable the optional composition-wise DFT minimum correction, place `inference2_ccs-dft-minima.pkl.gz` in `data/` and set `apply_dft_minimum_correction = True`. The notebook writes its long-format results to `data/inference2_ccs-finite_temperature_hull.pkl.gz`.
+
+Downloaded and generated `*.pkl.gz` files under `data/` are ignored by Git.
 
 ---
 
