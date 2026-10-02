@@ -65,7 +65,7 @@ The notebooks use the following input datasets and generated outputs in the `dat
 
 | Dataset                                     | Description                                                                                                                                                                                                    |
 |---------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `2d-materials-point-defects-all-table`      | Processed 2DMD dataset (12866 samples).                                                                                                                                                                        |
+| `2d-materials-point-defects-all-table`      | Processed 2DMD dataset (12,866 samples), prepared with the related [2DMD_at_a_Glance](https://github.com/AIRI-Institute/2DMD_at_a_Glance) project.                                                                                                                                                                        |
 | `neat_elements-dft_subset`                  | Reference DFT-derived energies of the pure elements (W, Mo, Se, S) (4 samples).                                                                                                                                |
 | `train_ccs-gnn_predictions_dft_subset`      | Training CCS with detailed description of structures, DFT-derived and GNN-predicted energies (11159 samples).                                                                                                  |
 | `train_ccs-2dmd-convex_hull`                | Training CCS and 2DMD structures with convex-hull energies and compositional simplex coordinates (11159 + 12866 + 4 samples).                                                                                  |
@@ -153,8 +153,11 @@ If you use this work, please cite the accompanying paper:
 
 ```
 @article{eremin2026chemical,
-  title={Chemical disorder and defects in MeX$_2$ (Me = Mo, W; X = S, Se) monolayers by means of data-driven approach},
-  author={Eremin R.A., Krautsou A.V., Humonen I.S., Ryabov A.A., Khrabrov K.A., Dembitskiy A.D., Antropov A.S., Efimov A.R., Novoselov K.S., Budennyy S.A.},
+  title={Combined DFT/GNN analysis of compositional disorder and defects in MeX${}_2$ (Me = Mo, W; X = S, Se) monolayers},
+  author={Eremin R.A., Krautsou A.V., Humonen I.S., Ryabov A.A., Khrabrov K.A., Dembitskiy A.D., Solovykh A.A., Antropov A.S., 
+  Efimov A.R., Novoselov K.S., Budennyy S.A.
+  },
+  journal={2D Materials},
   year={2026}
 }
 ```
