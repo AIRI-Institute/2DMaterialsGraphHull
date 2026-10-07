@@ -6,13 +6,13 @@
   <img src="./figures/logo.png" width="100%" title="2DMaterialsGraphHull datasets" alt="2DMaterialsGraphHull datasets"/>
 </p>
 
-
 ---
 
 ## Table of Contents
 
 - [Overview](#overview)
 - [Repository Structure](#repository-structure)
+- [Analysis Workflow](#analysis-workflow)
 - [Data Requirements](#data-requirements)
 - [Installation and Usage](#installation-and-usage)
 - [Dependencies](#dependencies)
@@ -29,7 +29,7 @@ Modeling disorder and defects in 2D materials is hard because the number of poss
 
 - **Symmetry-aware configuration sampling (CCS)** — enumeration of symmetrically inequivalent defect/alloy arrangements in MeX₂ supercells, built with the *Supercell* program and analyzed with *Spglib*/*pymatgen*, while retaining the degeneracy weights needed for thermodynamic averaging.
 - **DFT calculations (VASP, PBE)** — reference formation energies and relaxed structures for training, validation, and holdout evaluation.
-- **GNN inference (Allegro and NequIP, E(3)-equivariant)** — models trained on different CCS- and 2DMD-derived subsets (including low- and high-defect-concentration splits) to predict energetics of unrelaxed configurations at scale, letting convex-hull and finite-temperature free-energy analysis be carried out across full configuration sets rather than sparse samples.
+- **GNN inference (Allegro and NequIP, E(3)-equivariant)** — models trained on different CCS- and 2DMD-derived subsets (including low- and high-defect-concentration splits) to predict energetics of unrelaxed configurations at scale, letting convex-hull and finite-temperature free-energy analysis be carried out across full configuration sets.
 - **Configurational entropy / finite-temperature free energy** — partition-function-based evaluation of ΔG using CCS weights, to go beyond 0 K convex-hull screening.
 - **Interpretable ML (Ridge Regression / Random Forest on defect-count descriptors)** — used to relate local defect motifs to energetic favorability alongside the GNN-based analysis.
 
@@ -38,29 +38,86 @@ Two complementary data sources feed this workflow:
 - **CCS (Composition/Configuration Space)** — the symmetry-unique defect/alloy configurations generated and DFT/GNN-evaluated in this work.
 - **2DMD dataset** — an existing library of 2D-material point-defect structures (Huang P., Lukin R., et al. Unveiling the complex structure-property correlation of defects in 2D materials based on high throughput datasets, *npj 2D Mater Appl* **7**, 6 (2023)), processed and augmented here via the companion [2DMD_at_a_Glance](https://github.com/AIRI-Institute/2DMD_at_a_Glance) code for use as additional training/validation/holdout data.
 
-The notebooks in this repository carry out CCS statistics and symmetry analysis, convex-hull construction and comparison of DFT vs. GNN energetics, holdout testing of the trained models (preliminary tests plus two inference CCS holdout tests, HT#1 and HT#2), configurational-entropy/free-energy evaluation, and descriptor-based interpretability. The dedicated finite-temperature analysis evaluates $F_{conf}(T)$ for every composition, reconstructs the lower convex hull at each temperature, and reports $F_{above hull}(T)$ and temperature-dependent hull membership.
+The notebooks cover CCS statistics and symmetry, 0 K convex hulls, DFT/GNN model evaluation, configurational free energies, cell-size sensitivity, and vibrational contributions. The [finite-temperature analysis](finite_temperature_hull_analysis.ipynb) rebuilds the lower convex hull at each temperature and evaluates stability across the 2×2×1 and 4×4×1 CCSs. Its default workflow uses the included compact datasets; an optional mode recomputes second-inference free energies from individual GNN predictions.
 
 ---
 
 ## Repository Structure
 
-| File                         | Description                                                                                                                                                                                       |
-|------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `train_ccs_statistics.ipynb` | Exploratory analysis of the training CCS dataset: space-group distributions, pairwise correlations, and heatmaps of defect counts.                                                                |
-| `convex_hull_analysis.ipynb` | Construction and visualization of the convex hull in the composition simplex, calculation of $E_{above hull}$, and comparison between DFT and GNN predictions using training CCS and 2DMD datasets. |
-| `preliminary_test.ipynb`     | Preliminary evaluation of model performance on test part of training CCS dataset with space groups below a symmetry threshold (P1, Cm, etc.).                                                     |
-| `holdout_test_1.ipynb`       | First holdout test (HT#1): evaluation of GNN models on DFT-derived structures from the first inference CCS.                                                                                       |
-| `holdout_test_2.ipynb`       | Second holdout test (HT#2): evaluation of GNN models on structures selected from the second inference CCS, including hull-energy predictions and configurational entropy analysis.                |
-| `finite_temperature_hull_analysis.ipynb` | Calculation of configurational free energies, reconstruction of the finite-temperature lower convex hull, and analysis of temperature-dependent stability across the second inference CCS. |
-| `tools.py`                   | Utility functions for data processing, simplex coordinates, convex hull, entropy calculations, and structure manipulation.                                                                        |
-| `requirements.txt`           | List of Python dependencies.                                                                                                                                                                      |
-| `data/`                      | Datasets (see below for details).                                                                                                                                                                 |
+| File or directory | Description |
+|---|---|
+| [train_ccs_statistics.ipynb](train_ccs_statistics.ipynb) | Training CCS statistics: space groups, symmetry weights, composition correlations and defect counts. |
+| [convex_hull_analysis.ipynb](convex_hull_analysis.ipynb) | The 0 K reference hull from training CCS, pure elements and 2DMD data; formation energies, distances above hull and composition-simplex views. |
+| [preliminary_test.ipynb](preliminary_test.ipynb) | Preliminary DFT/GNN comparison on low-symmetry training CCS configurations and model errors across hull-distance cutoffs. |
+| [holdout_test_1.ipynb](holdout_test_1.ipynb) | First inference CCS and HT#1: model evaluation, configurational free energies and structural-descriptor analysis at two fixed compositions. |
+| [holdout_test_2.ipynb](holdout_test_2.ipynb) | Second inference CCS and HT#2: model-guided selection, DFT/GNN comparisons, composition-resolved stability and DFT minimum export. |
+| [finite_temperature_hull_analysis.ipynb](finite_temperature_hull_analysis.ipynb) | Configurational free energies, temperature-dependent hulls, effective-cell-size estimates, phonon tie planes and onset shifts. |
+| [tools.py](tools.py) | Utilities for data processing, hull calculations, configurational entropy and structure manipulation. |
+| [analysis/](analysis/) | Shared thermodynamic, finite-size, phonon and plotting functions. |
+| [requirements.txt](requirements.txt) | Python dependencies for all notebooks. |
+| [data/](data/) | Included compact inputs, reference tables and downloaded datasets. |
+| [phonons_results/](phonons_results/) | Structures, phonopy outputs and compressed VASP force-calculation records for 25 cells, with calculation provenance. |
+| [figures/](figures/) | Publication figures and the repository logo. |
+| [results/](#results) | Generated tables and figures. |
+
+---
+
+## Analysis Workflow
+
+Each notebook opens with a short description, links to the repository guide and adjacent analyses, and a contents list for its sections. The analyses follow this sequence:
+
+1. [Training CCS statistics](train_ccs_statistics.ipynb) — characterize the composition and configuration sets.
+2. [0 K convex hull](convex_hull_analysis.ipynb) — construct the energetic reference from CCS, pure-element and 2DMD data.
+3. [Preliminary testing](preliminary_test.ipynb) — compare model predictions on low-symmetry configurations.
+4. [First holdout test](holdout_test_1.ipynb) — assess configurational generalization at two fixed compositions and inspect structural descriptors.
+5. [Second holdout test](holdout_test_2.ipynb) — evaluate the second inference CCS and export the calculated DFT minima.
+6. [Finite-temperature stability](finite_temperature_hull_analysis.ipynb) — evaluate configurational stabilization, cell-size sensitivity and vibrational contributions.
+
+### Finite-temperature stability
+
+The finite-temperature notebook evaluates stability across the 2×2×1 and 4×4×1 CCSs, explains the thermodynamic assumptions, and reproduces the corresponding tables and figures.
+
+| Notebook section | Input and purpose | Publication result |
+|---|---|---|
+| [Configurational free energy and full hull](finite_temperature_hull_analysis.ipynb#configurational-free-energy) | 11,159 DFT configurations in the 420-composition 2×2×1 CCS; rebuild the hull at every temperature | Full finite-temperature hull table |
+| [Vacancy-free hull](finite_temperature_hull_analysis.ipynb#vacancy-free-hull) | Rebuild the hull from the 45 vacancy-free compositions, including 21 quaternaries | Supplementary Figure 24: [PNG](figures/finite_temperature/figure_quaternary_onhull_vacancyfree.png) · [PDF](figures/finite_temperature/figure_quaternary_onhull_vacancyfree.pdf) |
+| [Second inference CCS](finite_temperature_hull_analysis.ipynb#second-inference-ccs) | Included DFT-anchored GNN hull-distance table for 544 compositions of the 4×4×1 CCS | Figure 6d: [PNG](figures/finite_temperature/fig441_6d_MoW.png) · [PDF](figures/finite_temperature/fig441_6d_MoW.pdf); Supplementary Figure 23: [PNG](figures/finite_temperature/fig441_6d_SSe.png) · [PDF](figures/finite_temperature/fig441_6d_SSe.pdf) |
+| [Effective cell size](finite_temperature_hull_analysis.ipynb#effective-cell-size) | Combinatorial entropy deficits and rescaled configurational stabilization | Supplementary Table 4; 4×4×1 entropy-deficit estimates |
+| [Phonon gates and moving tie planes](finite_temperature_hull_analysis.ipynb#phonon-acceptance-gates) | 25 included phonopy records, six targets and their endmembers | Supplementary Figure 25: [PNG](figures/phonons/figure_dfvib_onset_window.png) · [PDF](figures/phonons/figure_dfvib_onset_window.pdf) |
+| [Onset shifts](finite_temperature_hull_analysis.ipynb#onset-shifts) | Vibrational residuals against the vacancy-free hull | Supplementary Table 5: [CSV](data/phonons/supplementary_table_5.csv) |
+
+### Running the finite-temperature analysis
+
+After installing the `requirements.txt`, open the finite-temperature notebook and run all cells. Its default `run_full_gnn = False` uses the included tables and phonopy outputs; it requires neither VASP/phonopy execution nor the large downloaded inference datasets. A batch run of the same notebook is available through Jupyter:
+
+```bash
+jupyter nbconvert --to notebook --execute finite_temperature_hull_analysis.ipynb \
+  --output finite_temperature_hull_analysis.executed.ipynb --output-dir results \
+  --ExecutePreprocessor.timeout=600
+```
+
+### Results storage
+
+Generated tables and figures are saved to `results/finite_temperature/`. The output directory can be redirected with `GRAPHHULL_OUTPUT_DIR`.
+
+All internal thermodynamic energies and long-format free-energy columns are **eV/atom**. Wide `dGhull_*` columns and vibrational tables are **meV/atom**. The temperature grid spans 0–1200 K in 10 K steps. Ordered elemental references remain at zero formation energy. The full and vacancy-free hulls use different composition sets; the phonon analysis uses the vacancy-free hull.
+
+Effective-cell-size stabilization is an estimate that transfers the base-cell energetic selectivity. Table 5 reports two onset-shift approximations. Its direct estimate uses the reconstructed 40 K backward-slope window documented in the notebook. All 15 supporting planes are computable; 7 of 10 competing planes are computable from the supplied phonon records.
 
 ---
 
 ## Data Requirements
 
-The notebooks use the following input datasets and generated outputs in the `data/` directory.
+The compact thermodynamic inputs and calculation records are included in the repository:
+
+| Included path | Content |
+|---|---|
+| [`data/ccs_2x2x1_full_energetics.csv`](data/ccs_2x2x1_full_energetics.csv) | Shared DFT energetics and symmetry weights for 11,159 configurations across 420 compositions. |
+| [`data/finite_temperature/`](data/finite_temperature/) | Full and vacancy-free 2×2×1 hull exports, the 4×4×1 hull-distance/onset cache, and the relaxed HT#2 energy record `11_wmo_full.out`. |
+| [`data/phonons/`](data/phonons/) | Vibrational free energies, target-window definitions, facet accounting and selection, and the reference Table 5. |
+| [`phonons_results/cells/`](phonons_results/cells/) | Unmodified per-cell phonopy and VASP calculation records. |
+
+The broader CCS statistics, model evaluation and optional full GNN workflow use the following downloaded datasets and generated outputs in the root `data/` directory.
 
 
 | Dataset                                     | Description                                                                                                                                                                                                    |
@@ -74,8 +131,8 @@ The notebooks use the following input datasets and generated outputs in the `dat
 | `inference1_ccs-gnn_predictions_subset`     | The first inference CCS with GNN-predicted energies (542196 samples).                                                                                                                                          |
 | `inference2_ccs-composition_size`           | Numbers of symmetry-inequivalent structures corresponding to each composition in the second inference CCS (544 samples).                                                                                       |
 | `inference2_ccs-gnn_predictions_subset`     | Subset of the second inference CCS with GNN-predicted energies (5004502 samples). It includes 11486 HT#2 structures; their DFT energies are processed from VASP results in `holdout_test_2.ipynb`.     |
-| `inference2_ccs-dft-minima`                 | Optional table generated by `holdout_test_2.ipynb`: the lowest calculated HT#2 DFT formation energy for each second-inference composition, indexed by `formula_str`. Used only when `apply_dft_minimum_correction = True`. |
-| `inference2_ccs-finite_temperature_hull`    | Generated long-format table containing composition, temperature, $F_{conf}$, the finite-temperature hull reference, $F_{above hull}$, hull membership, and CSS coverage metadata.                          |
+| `inference2_ccs-dft-minima`                 | Optional table generated by `holdout_test_2.ipynb`: the lowest calculated HT#2 DFT formation energy for each second-inference composition, indexed by `formula_str`. Used for DFT correction in the optional full GNN run; if this export is absent, the included relaxed-energy text record provides the anchors. |
+| `inference2_ccs-finite_temperature_hull`    | Generated long-format table containing composition, temperature, $F_{conf}$, the finite-temperature hull reference, $F_{above hull}$, hull membership, and CCS coverage metadata.                          |
 
 ---
 
@@ -106,11 +163,11 @@ The notebooks use the following input datasets and generated outputs in the `dat
    ```bash
    jupyter lab
    ```
-Each notebook in the repository contains detailed comments and can be executed independently once the required data is in place.
+Each notebook contains explanatory comments and can be executed independently once its required inputs are in place. The finite-temperature notebook’s compact default uses the included inputs; the other notebooks require the downloaded datasets and, for DFT processing, the original VASP records.
 
-`finite_temperature_hull_analysis.ipynb` uses `inference2_ccs-gnn_predictions_subset.pkl.gz` and, by default, evaluates the hull from uncorrected GNN energies. To use the optional composition-wise DFT minimum correction, run `holdout_test_2.ipynb` through the DFT minima export cell, then set `apply_dft_minimum_correction = True` in the finite-temperature notebook. The export cell groups `structures_fi_result` by `formula_str`, verifies that every second-inference composition has a DFT result, and writes `data/inference2_ccs-dft-minima.pkl.gz`. The DFT results come from the original VASP files under `dft/neat_elements/3res_structures/` and `dft/WMoUSeSNp_enh2_low_en/3res_structures/`; the GNN prediction file alone cannot generate these minima. The minimum is over the calculated HT#2 configurations, so it is not guaranteed to be the global DFT minimum. The finite-temperature notebook writes its long-format results to `data/inference2_ccs-finite_temperature_hull.pkl.gz`.
+The finite-temperature notebook uses the included compact inputs by default. Set `run_full_gnn = True` to read `inference2_ccs-gnn_predictions_subset.pkl.gz` and recompute configurational free energies for the second inference CCS. DFT minimum correction is enabled by default in this mode; set `apply_dft_minimum_correction = False` for uncorrected GNN energies. The included 4×4×1 cache contains hull distances and onsets, not absolute free energies, so it cannot replace the individual predictions for this recomputation.
 
-Downloaded and generated `*.pkl.gz` files under `data/` are ignored by Git.
+For DFT anchoring, the notebook prefers `data/inference2_ccs-dft-minima.pkl.gz` exported by `holdout_test_2.ipynb`, or falls back to the included `data/finite_temperature/11_wmo_full.out` with explicit elemental reference energies. The HT#2 export groups `structures_fi_result` by `formula_str`, validates complete composition coverage and finite energies, records the energy unit and elemental references, and writes the per-composition minimum. Generating that export requires the original VASP results under `dft/neat_elements/3res_structures/` and `dft/WMoUSeSNp_enh2_low_en/3res_structures/`. A minimum over these calculated configurations is not guaranteed to be the global DFT minimum. Missing anchors stop the corrected calculation. A full run writes `data/inference2_ccs-finite_temperature_hull.pkl.gz` and an inspectable CSV under `results/finite_temperature/`.
 
 ---
 
@@ -120,6 +177,7 @@ Main packages (see `requirements.txt`):
 
 - Python ≥ 3.11
 - Jupyter, Matplotlib, NumPy, Pandas, Plotly, Seaborn
+- PyYAML (reading included phonopy records)
 - PyMatGen (structure manipulation, space-group analysis)
 - SciPy, scikit-learn (Ridge Regression, Random Forest, GridSearchCV)
 - NetworkX

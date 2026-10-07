@@ -1,4 +1,10 @@
 /venv/
+/.venv/
 /.ipynb_checkpoints/
 /.idea/
-/__pycache__/
+__pycache__/
+*.py[cod]
+.DS_Store
+/new/
+/data/*.pkl.gz
+/results/

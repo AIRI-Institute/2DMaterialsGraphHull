@@ -1,0 +1,20 @@
+SYSTEM = v2 phonon forces, 12-atom MeX2 cell in a 3x3x1 supercell (108 atoms)
+# ISYM=0: displacements break the symmetry and phonopy must be the single authority on it;
+# VASP symmetrising forces onto its own guess is the failure mode that cost 11 of 22 cells.
+# Time-reversal (k <-> -k) is still exploited and is exact here (non-magnetic, no SOC).
+# EDIFF tightened 1E-7 -> 1E-8: electronic noise lands on the soft modes, which limit F_vib.
+PREC   = Accurate
+ENCUT  = 500
+ISMEAR = 0
+SIGMA  = 0.04
+ISYM   = 0
+GGA    = PE
+EDIFF  = 1E-8
+ADDGRID= .TRUE.
+LREAL  = .FALSE.
+IBRION = -1
+NSW    = 0
+ISIF   = 2
+LWAVE  = .FALSE.
+LCHARG = .FALSE.
+NCORE  = 8

@@ -11,6 +11,10 @@ from pymatgen.transformations.site_transformations import TranslateSitesTransfor
 from tqdm.notebook import tqdm
 from collections import OrderedDict, Counter
 from scipy.constants import Boltzmann, elementary_charge
+from analysis.thermodynamics import (
+    configuration_free_energy, simplex_basis as simplexBasis,
+    transform_composition, hull_reference as getEhull,
+)
 
 
 elements = ['W', 'Mo', 'U', 'Se', 'S', 'Np']
@@ -50,36 +54,15 @@ def formula2string(ordered_dict_formula, multiply=1):
     return out_str
 
     
-def simplexBasis(n):  # n == number of unique elements - 1 
-    basis = np.vstack((np.eye(n), (1 + np.sqrt(n + 1)) / n * np.ones((1, n))))
-    basis -= np.mean(basis, axis=0)
-    return basis / np.sqrt(2)
+
+
+
+
 
 
 def compositionTranform(composition, simplex_basis):
-    composition = composition / np.sum(composition)  # norm composition to the element fractions
-    return np.sum(composition.reshape(-1, 1) * simplex_basis, axis=0) 
-
-
-def getEhull(point, hull, return_simplice=False):
-    equations = hull.equations  
-    simplices = hull.simplices
-    # -2 index is for form.energies, -1 index contains biases
-    mask = list(map(lambda x: all([hull.points[point_index][-1] < 1e-05 for point_index in x]), hull.simplices))
-    # the mask avoid consideration of simplices containing positive form.energy vertiсes
-    equations = equations[mask] 
-    simplices = simplices[mask]
-    mask = (np.abs(equations[:, -2]) > 1e-05) & (np.abs(1 - equations[:, -2]) > 1e-05)
-    # all facets parallel to the energy axis or having zero slope are removed by the mask
-    equations = equations[mask] 
-    simplices = simplices[mask]
-    planes = equations.T
-    energy_coord = -(np.dot(planes[:-2].T, point) + planes[-1]) / planes[-2]
-    # among all possible intersection the correct one should possess the maximum energy
-    maxen_index = np.argmax(energy_coord)
-    if return_simplice:
-        return energy_coord[maxen_index], simplices[maxen_index]
-    return energy_coord[maxen_index]
+    """Legacy spelling and keyword signature for composition projection."""
+    return transform_composition(composition, simplex_basis)
 
 
 def orderedDictFormula(structure, from_cif_mode=False):
@@ -250,21 +233,11 @@ def Z(energies_eV_cell, weights, T):
 
 
 def T_delta_Sconf(energies_eV_cell, weights, T, natoms_for_per_atom=0):
-    """
-    configurational entropy contribution to free energies
-    energies_eV_cell = energies per cell (formation energies or relaxed energies)
-    weights = weights of the structures from the ccs used (number of merged symmetrical realizations)
-    T = temperature in Kelvin
-    natoms_for_per_atom = number of atoms in the model cell from the ccs used
-    """
-    min_energy = energies_eV_cell.min()
-    energies_eV_cell = energies_eV_cell - min_energy
-    if np.abs(T) < 1e-15:
-        T = 1e-15
-    TdSconf = - T * kB * np.log(Z(energies_eV_cell, weights, T))
-    if natoms_for_per_atom > 0:
-        return (TdSconf + min_energy) / natoms_for_per_atom
-    return TdSconf + min_energy
+    """Legacy notebook interface; shared stable partition sum, preserving its kB."""
+    return configuration_free_energy(
+        energies_eV_cell, weights, T,
+        n_atoms=natoms_for_per_atom if natoms_for_per_atom > 0 else 1, k_b_eV=kB,
+    )
 
 
 def getRMSEforModelEhullLimit (test_set, model, limit):
