@@ -212,9 +212,7 @@ If you use this work, please cite the accompanying paper:
 ```
 @article{eremin2026chemical,
   title={Combined DFT/GNN analysis of compositional disorder and defects in MeX${}_2$ (Me = Mo, W; X = S, Se) monolayers},
-  author={Eremin R.A., Krautsou A.V., Humonen I.S., Ryabov A.A., Khrabrov K.A., Dembitskiy A.D., Solovykh A.A., Antropov A.S., 
-  Efimov A.R., Novoselov K.S., Budennyy S.A.
-  },
+  author={Eremin R.A., Krautsou A.V., Humonen I.S., Ryabov A.A., Khrabrov K.A., Dembitskiy A.D., Solovykh A.A., Antropov A.S., Efimov A.R., Novoselov K.S., Budennyy S.A.},
   journal={2D Materials},
   year={2026}
 }
