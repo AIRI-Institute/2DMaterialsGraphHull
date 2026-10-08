@@ -1,6 +1,6 @@
 # 2DMaterialsGraphHull
 
-**2DMaterialsGraphHull** provides the composition/configuration-space (CCS) datasets, DFT and graph neural network (GNN) energetics, and post-processing code developed for studying chemical disorder and point defects in two-dimensional transition metal dichalcogenide (TMD) monolayers — alloyed and defected MeX₂ (Me = Mo, W; X = S, Se) systems.
+**2DMaterialsGraphHull** provides the composition/configuration-space (CCS) datasets, DFT and graph neural network (GNN) energetics, and post-processing code developed for studying chemical disorder and point defects in two-dimensional transition metal dichalcogenide (TMD) monolayers — alloyed and defected MeX₂ (Me = Mo, W; X = S, Se) systems. This repository is part of publication [Combined DFT/GNN analysis of compositional disorder and defects in MeX₂ (Me = Mo, W; X = S, Se) monolayers](https://doi.org/10.1088/2053-1583/aeb142).
 
 <p align="center">
   <img src="./figures/logo.png" width="100%" title="2DMaterialsGraphHull datasets" alt="2DMaterialsGraphHull datasets"/>
@@ -210,10 +210,11 @@ e.g., a model named `allegro_random_2dmd-ldc` refers to the *Allegro* architectu
 If you use this work, please cite the accompanying paper:
 
 ```
-@article{eremin2026chemical,
-  title={Combined DFT/GNN analysis of compositional disorder and defects in MeX${}_2$ (Me = Mo, W; X = S, Se) monolayers},
-  author={Eremin R.A., Krautsou A.V., Humonen I.S., Ryabov A.A., Khrabrov K.A., Dembitskiy A.D., Solovykh A.A., Antropov A.S., Efimov A.R., Novoselov K.S., Budennyy S.A.},
+@article{10.1088/2053-1583/aeb142,
+  title={Combined DFT/GNN analysis of compositional disorder and defects in MeX2 (Me = Mo, W; X = S, Se) monolayers},
+  author={Eremin, Roman A. and Krautsou, Aliaksei V. and Humonen, Innokentiy S. and Ryabov, Alexander A. and Khrabrov, Kuzma A. and Dembitskiy, Artem D. and Solovykh, Alexander A. and Antropov, Aleksandr S. and Efimov, Albert R. and Novoselov, Kostya S. and Budennyy, Semen A.},
   journal={2D Materials},
+  url={http://iopscience.iop.org/article/10.1088/2053-1583/aeb142},
   year={2026}
 }
 ```
